@@ -1,0 +1,6 @@
+label,count,fraction
+action_format_or_task_protocol,8,0.4
+planning_or_precondition,6,0.3
+exploration_or_search,2,0.1
+perception_or_memory,4,0.2
+loop_or_recovery,0,0.0

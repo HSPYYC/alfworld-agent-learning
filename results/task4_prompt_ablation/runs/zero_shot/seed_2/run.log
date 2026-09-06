@@ -1,0 +1,210 @@
+Running split=eval_out_of_distribution games=134 workers=8 max_env_steps=50 max_agent_turns=150
+Initializing AlfredTWEnv...
+Initializing AlfredTWEnv...
+Initializing AlfredTWEnv...
+Initializing AlfredTWEnv...
+Initializing AlfredTWEnv...
+Initializing AlfredTWEnv...
+Initializing AlfredTWEnv...
+Initializing AlfredTWEnv...
+
+  0%|          | 0/341 [00:00<?, ?it/s]
+  0%|          | 0/341 [00:00<?, ?it/s]
+  0%|          | 0/341 [00:00<?, ?it/s]
+  0%|          | 0/341 [00:00<?, ?it/s]
+  0%|          | 0/341 [00:00<?, ?it/s]
+  0%|          | 0/341 [00:00<?, ?it/s]
+  0%|          | 0/341 [00:00<?, ?it/s]
+  0%|          | 0/341 [00:00<?, ?it/s]
+ 60%|██████    | 206/341 [00:00<00:00, 2043.56it/s]
+ 60%|██████    | 206/341 [00:00<00:00, 2040.88it/s]
+ 54%|█████▎    | 183/341 [00:00<00:00, 1809.58it/s]
+ 54%|█████▎    | 183/341 [00:00<00:00, 1809.59it/s]
+ 60%|██████    | 206/341 [00:00<00:00, 2035.01it/s]
+ 60%|██████    | 206/341 [00:00<00:00, 2033.04it/s]
+ 60%|██████    | 206/341 [00:00<00:00, 2031.11it/s]
+ 60%|██████    | 206/341 [00:00<00:00, 2029.77it/s]
+100%|██████████| 341/341 [00:00<00:00, 1583.06it/s]
+100%|██████████| 341/341 [00:00<00:00, 1582.98it/s]
+
+
+100%|██████████| 341/341 [00:00<00:00, 1582.17it/s]
+
+100%|██████████| 341/341 [00:00<00:00, 1581.77it/s]
+
+100%|██████████| 341/341 [00:00<00:00, 1578.71it/s]
+
+100%|██████████| 341/341 [00:00<00:00, 1563.96it/s]
+
+100%|██████████| 341/341 [00:00<00:00, 1231.52it/s]
+
+100%|██████████| 341/341 [00:00<00:00, 1228.58it/s]
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 1: 1/17 success=1 task=pick_clean_then_place_in_recep env_steps=11 agent_turns=12 thoughts=0 parse_failures=1 llm_calls=12 tokens=3411 termination=success
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 5: 1/17 success=0 task=pick_clean_then_place_in_recep env_steps=7 agent_turns=17 thoughts=2 parse_failures=8 llm_calls=17 tokens=7753 termination=parse_failure_loop
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 6: 1/16 success=1 task=pick_clean_then_place_in_recep env_steps=9 agent_turns=12 thoughts=2 parse_failures=1 llm_calls=12 tokens=4185 termination=success
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 2: 1/17 success=0 task=pick_heat_then_place_in_recep env_steps=12 agent_turns=21 thoughts=1 parse_failures=8 llm_calls=21 tokens=9381 termination=parse_failure_loop
+worker 5: 2/17 success=0 task=pick_heat_then_place_in_recep env_steps=2 agent_turns=13 thoughts=1 parse_failures=10 llm_calls=13 tokens=3363 termination=parse_failure_loop
+worker 2: 2/17 success=0 task=look_at_obj_in_light env_steps=7 agent_turns=16 thoughts=1 parse_failures=8 llm_calls=16 tokens=4711 termination=parse_failure_loop
+worker 1: 2/17 success=0 task=pick_heat_then_place_in_recep env_steps=8 agent_turns=19 thoughts=3 parse_failures=8 llm_calls=19 tokens=9297 termination=parse_failure_loop
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 0: 1/17 success=0 task=pick_clean_then_place_in_recep env_steps=50 agent_turns=51 thoughts=1 parse_failures=0 llm_calls=51 tokens=21437 termination=env_done_without_success
+worker 5: 3/17 success=0 task=look_at_obj_in_light env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1400 termination=parse_failure_loop
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 3: 1/17 success=0 task=pick_two_obj_and_place env_steps=50 agent_turns=52 thoughts=1 parse_failures=1 llm_calls=52 tokens=25790 termination=env_done_without_success
+worker 0: 2/17 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2084 termination=parse_failure_loop
+worker 5: 4/17 success=0 task=pick_two_obj_and_place env_steps=3 agent_turns=18 thoughts=6 parse_failures=9 llm_calls=18 tokens=7935 termination=parse_failure_loop
+worker 0: 3/17 success=0 task=look_at_obj_in_light env_steps=18 agent_turns=28 thoughts=1 parse_failures=9 llm_calls=28 tokens=13232 termination=parse_failure_loop
+worker 2: 3/17 success=0 task=look_at_obj_in_light env_steps=50 agent_turns=52 thoughts=2 parse_failures=0 llm_calls=52 tokens=40873 termination=env_done_without_success
+worker 3: 2/17 success=0 task=pick_cool_then_place_in_recep env_steps=50 agent_turns=55 thoughts=2 parse_failures=3 llm_calls=55 tokens=24448 termination=env_done_without_success
+worker 2: 4/17 success=0 task=look_at_obj_in_light env_steps=13 agent_turns=22 thoughts=1 parse_failures=8 llm_calls=22 tokens=9307 termination=parse_failure_loop
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 7: 1/16 success=0 task=pick_clean_then_place_in_recep env_steps=23 agent_turns=59 thoughts=35 parse_failures=1 llm_calls=59 tokens=54627 termination=thought_loop
+worker 0: 4/17 success=0 task=pick_clean_then_place_in_recep env_steps=24 agent_turns=49 thoughts=25 parse_failures=0 llm_calls=49 tokens=41449 termination=thought_loop
+worker 7: 2/16 success=1 task=pick_and_place_simple env_steps=6 agent_turns=12 thoughts=4 parse_failures=2 llm_calls=12 tokens=3878 termination=success
+worker 0: 5/17 success=0 task=pick_cool_then_place_in_recep env_steps=10 agent_turns=20 thoughts=1 parse_failures=9 llm_calls=20 tokens=6300 termination=parse_failure_loop
+worker 3: 3/17 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=23 thoughts=6 parse_failures=17 llm_calls=23 tokens=12281 termination=parse_failure_loop
+worker 0: 6/17 success=0 task=look_at_obj_in_light env_steps=4 agent_turns=13 thoughts=1 parse_failures=8 llm_calls=13 tokens=3833 termination=parse_failure_loop
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+worker 4: 1/17 success=0 task=pick_heat_then_place_in_recep env_steps=17 agent_turns=47 thoughts=29 parse_failures=1 llm_calls=47 tokens=48862 termination=thought_loop
+worker 2: 5/17 success=0 task=pick_cool_then_place_in_recep env_steps=50 agent_turns=55 thoughts=2 parse_failures=3 llm_calls=55 tokens=24448 termination=env_done_without_success
+worker 3: 4/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2015 termination=parse_failure_loop
+worker 3: 5/17 success=0 task=pick_and_place_simple env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1409 termination=parse_failure_loop
+worker 0: 7/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2315 termination=parse_failure_loop
+worker 4: 2/17 success=0 task=pick_and_place_simple env_steps=10 agent_turns=19 thoughts=0 parse_failures=9 llm_calls=19 tokens=5374 termination=parse_failure_loop
+worker 6: 2/16 success=0 task=pick_heat_then_place_in_recep env_steps=21 agent_turns=48 thoughts=27 parse_failures=0 llm_calls=48 tokens=49779 termination=thought_loop
+worker 0: 8/17 success=0 task=pick_heat_then_place_in_recep env_steps=6 agent_turns=15 thoughts=1 parse_failures=8 llm_calls=15 tokens=4787 termination=parse_failure_loop
+worker 7: 3/16 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=61 thoughts=35 parse_failures=26 llm_calls=61 tokens=37099 termination=thought_loop
+worker 6: 3/16 success=0 task=look_at_obj_in_light env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1407 termination=parse_failure_loop
+worker 2: 6/17 success=0 task=look_at_obj_in_light env_steps=0 agent_turns=15 thoughts=4 parse_failures=11 llm_calls=15 tokens=5713 termination=parse_failure_loop
+worker 0: 9/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1357 termination=parse_failure_loop
+worker 4: 3/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=2194 termination=parse_failure_loop
+worker 6: 4/16 success=0 task=pick_clean_then_place_in_recep env_steps=5 agent_turns=19 thoughts=0 parse_failures=14 llm_calls=19 tokens=4949 termination=parse_failure_loop
+worker 7: 4/16 success=0 task=pick_and_place_simple env_steps=10 agent_turns=19 thoughts=0 parse_failures=9 llm_calls=19 tokens=5374 termination=parse_failure_loop
+worker 6: 5/16 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1759 termination=parse_failure_loop
+worker 4: 4/17 success=0 task=pick_and_place_simple env_steps=11 agent_turns=21 thoughts=1 parse_failures=9 llm_calls=21 tokens=6235 termination=parse_failure_loop
+worker 3: 6/17 success=1 task=pick_and_place_simple env_steps=39 agent_turns=48 thoughts=7 parse_failures=2 llm_calls=48 tokens=38402 termination=success
+worker 4: 5/17 success=0 task=pick_and_place_simple env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1409 termination=parse_failure_loop
+worker 3: 7/17 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2996 termination=parse_failure_loop
+worker 6: 6/16 success=0 task=pick_clean_then_place_in_recep env_steps=32 agent_turns=41 thoughts=1 parse_failures=8 llm_calls=41 tokens=31387 termination=parse_failure_loop
+worker 5: 5/17 success=0 task=look_at_obj_in_light env_steps=32 agent_turns=58 thoughts=26 parse_failures=0 llm_calls=58 tokens=55963 termination=thought_loop
+worker 6: 7/16 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2084 termination=parse_failure_loop
+worker 5: 6/17 success=0 task=pick_and_place_simple env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2015 termination=parse_failure_loop
+worker 7: 5/16 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=36 thoughts=26 parse_failures=10 llm_calls=36 tokens=23663 termination=thought_loop
+worker 3: 8/17 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=3529 termination=parse_failure_loop
+worker 7: 6/16 success=0 task=pick_and_place_simple env_steps=0 agent_turns=10 thoughts=1 parse_failures=9 llm_calls=10 tokens=1813 termination=parse_failure_loop
+worker 5: 7/17 success=0 task=pick_heat_then_place_in_recep env_steps=3 agent_turns=15 thoughts=0 parse_failures=12 llm_calls=15 tokens=4275 termination=parse_failure_loop
+worker 2: 7/17 success=0 task=pick_clean_then_place_in_recep env_steps=1 agent_turns=23 thoughts=3 parse_failures=19 llm_calls=23 tokens=13796 termination=parse_failure_loop
+worker 7: 7/16 success=0 task=pick_heat_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2687 termination=parse_failure_loop
+worker 0: 10/17 success=0 task=pick_two_obj_and_place env_steps=16 agent_turns=42 thoughts=26 parse_failures=0 llm_calls=42 tokens=26606 termination=thought_loop
+worker 4: 6/17 success=0 task=look_at_obj_in_light env_steps=16 agent_turns=47 thoughts=30 parse_failures=1 llm_calls=47 tokens=27007 termination=thought_loop
+worker 6: 8/16 success=0 task=pick_cool_then_place_in_recep env_steps=50 agent_turns=55 thoughts=2 parse_failures=3 llm_calls=55 tokens=24448 termination=env_done_without_success
+worker 3: 9/17 success=0 task=look_at_obj_in_light env_steps=24 agent_turns=37 thoughts=1 parse_failures=12 llm_calls=37 tokens=23196 termination=parse_failure_loop
+worker 7: 8/16 success=0 task=pick_cool_then_place_in_recep env_steps=7 agent_turns=19 thoughts=0 parse_failures=12 llm_calls=19 tokens=6032 termination=parse_failure_loop
+worker 5: 8/17 success=0 task=pick_and_place_simple env_steps=27 agent_turns=41 thoughts=0 parse_failures=14 llm_calls=41 tokens=15794 termination=parse_failure_loop
+worker 5: 9/17 success=0 task=look_at_obj_in_light env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1424 termination=parse_failure_loop
+worker 3: 10/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=16 thoughts=2 parse_failures=14 llm_calls=16 tokens=4682 termination=parse_failure_loop
+worker 2: 8/17 success=0 task=pick_heat_then_place_in_recep env_steps=32 agent_turns=42 thoughts=2 parse_failures=8 llm_calls=42 tokens=30898 termination=parse_failure_loop
+worker 5: 10/17 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1759 termination=parse_failure_loop
+worker 0: 11/17 success=1 task=pick_clean_then_place_in_recep env_steps=27 agent_turns=29 thoughts=1 parse_failures=1 llm_calls=29 tokens=17054 termination=success
+worker 3: 11/17 success=1 task=pick_heat_then_place_in_recep env_steps=14 agent_turns=17 thoughts=1 parse_failures=2 llm_calls=17 tokens=6772 termination=success
+worker 0: 12/17 success=0 task=pick_heat_then_place_in_recep env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1759 termination=parse_failure_loop
+worker 3: 12/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1357 termination=parse_failure_loop
+worker 0: 13/17 success=0 task=pick_and_place_simple env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1783 termination=parse_failure_loop
+worker 2: 9/17 success=0 task=pick_heat_then_place_in_recep env_steps=22 agent_turns=31 thoughts=1 parse_failures=8 llm_calls=31 tokens=19023 termination=parse_failure_loop
+worker 6: 9/16 success=0 task=pick_clean_then_place_in_recep env_steps=9 agent_turns=37 thoughts=13 parse_failures=15 llm_calls=37 tokens=23849 termination=parse_failure_loop
+worker 4: 7/17 success=0 task=pick_two_obj_and_place env_steps=50 agent_turns=51 thoughts=1 parse_failures=0 llm_calls=51 tokens=33267 termination=env_done_without_success
+worker 5: 11/17 success=0 task=pick_and_place_simple env_steps=30 agent_turns=40 thoughts=0 parse_failures=10 llm_calls=40 tokens=23550 termination=parse_failure_loop
+worker 2: 10/17 success=0 task=pick_clean_then_place_in_recep env_steps=4 agent_turns=13 thoughts=1 parse_failures=8 llm_calls=13 tokens=4633 termination=parse_failure_loop
+worker 1: 3/17 success=0 task=pick_heat_then_place_in_recep env_steps=24 agent_turns=94 thoughts=46 parse_failures=24 llm_calls=94 tokens=120272 termination=thought_loop
+worker 5: 12/17 success=0 task=pick_clean_then_place_in_recep env_steps=11 agent_turns=24 thoughts=0 parse_failures=13 llm_calls=24 tokens=8752 termination=parse_failure_loop
+worker 2: 11/17 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2236 termination=parse_failure_loop
+worker 4: 8/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=2590 termination=parse_failure_loop
+worker 3: 13/17 success=0 task=pick_two_obj_and_place env_steps=41 agent_turns=50 thoughts=1 parse_failures=8 llm_calls=50 tokens=24406 termination=parse_failure_loop
+worker 7: 9/16 success=0 task=pick_heat_then_place_in_recep env_steps=11 agent_turns=49 thoughts=31 parse_failures=7 llm_calls=49 tokens=39126 termination=thought_loop
+worker 0: 14/17 success=0 task=pick_clean_then_place_in_recep env_steps=1 agent_turns=13 thoughts=2 parse_failures=10 llm_calls=13 tokens=5060 termination=parse_failure_loop
+worker 1: 4/17 success=0 task=pick_clean_then_place_in_recep env_steps=6 agent_turns=15 thoughts=1 parse_failures=8 llm_calls=15 tokens=4075 termination=parse_failure_loop
+worker 2: 12/17 success=0 task=pick_heat_then_place_in_recep env_steps=2 agent_turns=10 thoughts=0 parse_failures=8 llm_calls=10 tokens=2496 termination=parse_failure_loop
+worker 0: 15/17 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2084 termination=parse_failure_loop
+worker 3: 14/17 success=0 task=pick_clean_then_place_in_recep env_steps=13 agent_turns=25 thoughts=2 parse_failures=10 llm_calls=25 tokens=8493 termination=parse_failure_loop
+worker 6: 10/16 success=0 task=pick_clean_then_place_in_recep env_steps=50 agent_turns=58 thoughts=2 parse_failures=6 llm_calls=58 tokens=34945 termination=env_done_without_success
+worker 5: 13/17 success=0 task=pick_clean_then_place_in_recep env_steps=13 agent_turns=28 thoughts=5 parse_failures=10 llm_calls=28 tokens=16017 termination=parse_failure_loop
+worker 0: 16/17 success=0 task=look_at_obj_in_light env_steps=5 agent_turns=16 thoughts=1 parse_failures=10 llm_calls=16 tokens=5077 termination=parse_failure_loop
+worker 7: 10/16 success=0 task=pick_cool_then_place_in_recep env_steps=18 agent_turns=46 thoughts=1 parse_failures=27 llm_calls=46 tokens=19275 termination=parse_failure_loop
+worker 3: 15/17 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2553 termination=parse_failure_loop
+worker 4: 9/17 success=0 task=pick_heat_then_place_in_recep env_steps=10 agent_turns=33 thoughts=7 parse_failures=16 llm_calls=33 tokens=20037 termination=parse_failure_loop
+worker 1: 5/17 success=1 task=pick_clean_then_place_in_recep env_steps=18 agent_turns=21 thoughts=3 parse_failures=0 llm_calls=21 tokens=12328 termination=success
+worker 2: 13/17 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=3529 termination=parse_failure_loop
+worker 0: 17/17 success=0 task=pick_and_place_simple env_steps=0 agent_turns=10 thoughts=1 parse_failures=9 llm_calls=10 tokens=1813 termination=parse_failure_loop
+finished 17/134 episodes
+worker 7: 11/16 success=0 task=pick_and_place_simple env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1783 termination=parse_failure_loop
+worker 2: 14/17 success=1 task=pick_and_place_simple env_steps=7 agent_turns=7 thoughts=0 parse_failures=0 llm_calls=7 tokens=1572 termination=success
+worker 6: 11/16 success=0 task=pick_clean_then_place_in_recep env_steps=13 agent_turns=27 thoughts=3 parse_failures=11 llm_calls=27 tokens=10038 termination=parse_failure_loop
+worker 1: 6/17 success=0 task=pick_and_place_simple env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1868 termination=parse_failure_loop
+worker 5: 14/17 success=0 task=pick_cool_then_place_in_recep env_steps=10 agent_turns=20 thoughts=1 parse_failures=9 llm_calls=20 tokens=6238 termination=parse_failure_loop
+worker 5: 15/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1933 termination=parse_failure_loop
+worker 6: 12/16 success=1 task=pick_and_place_simple env_steps=6 agent_turns=10 thoughts=2 parse_failures=2 llm_calls=10 tokens=2690 termination=success
+worker 2: 15/17 success=0 task=look_at_obj_in_light env_steps=15 agent_turns=26 thoughts=1 parse_failures=10 llm_calls=26 tokens=11459 termination=parse_failure_loop
+worker 6: 13/16 success=0 task=pick_and_place_simple env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1713 termination=parse_failure_loop
+worker 1: 7/17 success=0 task=pick_heat_then_place_in_recep env_steps=19 agent_turns=28 thoughts=1 parse_failures=8 llm_calls=28 tokens=18987 termination=parse_failure_loop
+worker 7: 12/16 success=0 task=pick_and_place_simple env_steps=48 agent_turns=59 thoughts=3 parse_failures=8 llm_calls=59 tokens=49161 termination=parse_failure_loop
+worker 6: 14/16 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2553 termination=parse_failure_loop
+worker 5: 16/17 success=0 task=look_at_obj_in_light env_steps=18 agent_turns=30 thoughts=3 parse_failures=9 llm_calls=30 tokens=11086 termination=parse_failure_loop
+worker 4: 10/17 success=0 task=pick_cool_then_place_in_recep env_steps=0 agent_turns=29 thoughts=25 parse_failures=4 llm_calls=29 tokens=16657 termination=thought_loop
+worker 3: 16/17 success=0 task=look_at_obj_in_light env_steps=2 agent_turns=42 thoughts=30 parse_failures=10 llm_calls=42 tokens=28935 termination=thought_loop
+worker 4: 11/17 success=0 task=pick_clean_then_place_in_recep env_steps=0 agent_turns=13 thoughts=1 parse_failures=12 llm_calls=13 tokens=4266 termination=parse_failure_loop
+worker 7: 13/16 success=0 task=pick_heat_then_place_in_recep env_steps=28 agent_turns=38 thoughts=0 parse_failures=10 llm_calls=38 tokens=28646 termination=parse_failure_loop
+worker 6: 15/16 success=0 task=pick_heat_then_place_in_recep env_steps=15 agent_turns=25 thoughts=2 parse_failures=8 llm_calls=25 tokens=14937 termination=parse_failure_loop
+worker 2: 16/17 success=0 task=pick_heat_then_place_in_recep env_steps=50 agent_turns=68 thoughts=6 parse_failures=12 llm_calls=68 tokens=36269 termination=env_done_without_success
+worker 7: 14/16 success=0 task=pick_cool_then_place_in_recep env_steps=5 agent_turns=15 thoughts=2 parse_failures=8 llm_calls=15 tokens=5325 termination=parse_failure_loop
+worker 3: 17/17 success=0 task=look_at_obj_in_light env_steps=38 agent_turns=49 thoughts=3 parse_failures=8 llm_calls=49 tokens=33540 termination=parse_failure_loop
+finished 34/134 episodes
+worker 6: 16/16 success=0 task=pick_cool_then_place_in_recep env_steps=6 agent_turns=25 thoughts=2 parse_failures=17 llm_calls=25 tokens=8098 termination=parse_failure_loop
+finished 50/134 episodes
+worker 4: 12/17 success=0 task=look_at_obj_in_light env_steps=11 agent_turns=24 thoughts=1 parse_failures=12 llm_calls=24 tokens=11491 termination=parse_failure_loop
+worker 1: 8/17 success=0 task=pick_clean_then_place_in_recep env_steps=30 agent_turns=59 thoughts=29 parse_failures=0 llm_calls=59 tokens=52828 termination=thought_loop
+worker 5: 17/17 success=0 task=pick_and_place_simple env_steps=50 agent_turns=58 thoughts=6 parse_failures=2 llm_calls=58 tokens=48213 termination=env_done_without_success
+finished 67/134 episodes
+worker 7: 15/16 success=0 task=pick_heat_then_place_in_recep env_steps=3 agent_turns=15 thoughts=0 parse_failures=12 llm_calls=15 tokens=4308 termination=parse_failure_loop
+worker 1: 9/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2262 termination=parse_failure_loop
+worker 2: 17/17 success=0 task=pick_cool_then_place_in_recep env_steps=17 agent_turns=45 thoughts=2 parse_failures=26 llm_calls=45 tokens=19195 termination=parse_failure_loop
+finished 84/134 episodes
+worker 7: 16/16 success=0 task=pick_clean_then_place_in_recep env_steps=5 agent_turns=14 thoughts=0 parse_failures=9 llm_calls=14 tokens=3827 termination=parse_failure_loop
+finished 100/134 episodes
+worker 1: 10/17 success=0 task=pick_heat_then_place_in_recep env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2687 termination=parse_failure_loop
+worker 4: 13/17 success=0 task=pick_clean_then_place_in_recep env_steps=37 agent_turns=56 thoughts=9 parse_failures=10 llm_calls=56 tokens=39320 termination=parse_failure_loop
+worker 1: 11/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=2183 termination=parse_failure_loop
+worker 1: 12/17 success=0 task=pick_cool_then_place_in_recep env_steps=1 agent_turns=35 thoughts=7 parse_failures=27 llm_calls=35 tokens=14191 termination=parse_failure_loop
+worker 1: 13/17 success=0 task=pick_and_place_simple env_steps=0 agent_turns=8 thoughts=0 parse_failures=8 llm_calls=8 tokens=1409 termination=parse_failure_loop
+worker 1: 14/17 success=0 task=pick_two_obj_and_place env_steps=0 agent_turns=9 thoughts=1 parse_failures=8 llm_calls=9 tokens=2015 termination=parse_failure_loop
+worker 4: 14/17 success=0 task=pick_and_place_simple env_steps=26 agent_turns=58 thoughts=27 parse_failures=5 llm_calls=58 tokens=34502 termination=thought_loop
+worker 1: 15/17 success=0 task=pick_and_place_simple env_steps=10 agent_turns=19 thoughts=0 parse_failures=9 llm_calls=19 tokens=5374 termination=parse_failure_loop
+worker 1: 16/17 success=0 task=pick_heat_then_place_in_recep env_steps=2 agent_turns=14 thoughts=0 parse_failures=12 llm_calls=14 tokens=3946 termination=parse_failure_loop
+worker 4: 15/17 success=0 task=pick_cool_then_place_in_recep env_steps=50 agent_turns=53 thoughts=0 parse_failures=3 llm_calls=53 tokens=24464 termination=env_done_without_success
+worker 1: 17/17 success=0 task=pick_cool_then_place_in_recep env_steps=2 agent_turns=23 thoughts=4 parse_failures=17 llm_calls=23 tokens=8600 termination=parse_failure_loop
+finished 117/134 episodes
+worker 4: 16/17 success=0 task=pick_and_place_simple env_steps=27 agent_turns=42 thoughts=1 parse_failures=14 llm_calls=42 tokens=16380 termination=parse_failure_loop
+worker 4: 17/17 success=0 task=pick_two_obj_and_place env_steps=3 agent_turns=18 thoughts=6 parse_failures=9 llm_calls=18 tokens=7935 termination=parse_failure_loop
+finished 134/134 episodes
+
+Evaluation summary
+overall: 9/134 success_rate=0.067 avg_env_steps=12.68 avg_agent_turns=25.84 invalid_action_rate=0.587 parse_failure_rate=0.326 errors=0
+pick_and_place_simple: 4/24 success_rate=0.167 avg_env_steps=12.79 avg_agent_turns=22.42 invalid_action_rate=0.550 parse_failure_rate=0.329 errors=0
+pick_clean_then_place_in_recep: 4/31 success_rate=0.129 avg_env_steps=12.87 avg_agent_turns=27.65 invalid_action_rate=0.401 parse_failure_rate=0.293 errors=0
+pick_heat_then_place_in_recep: 1/23 success_rate=0.043 avg_env_steps=13.09 avg_agent_turns=29.04 invalid_action_rate=0.422 parse_failure_rate=0.308 errors=0
+pick_cool_then_place_in_recep: 0/21 success_rate=0.000 avg_env_steps=13.14 avg_agent_turns=27.14 invalid_action_rate=0.967 parse_failure_rate=0.409 errors=0
+look_at_obj_in_light: 0/18 success_rate=0.000 avg_env_steps=14.06 avg_agent_turns=27.72 invalid_action_rate=0.494 parse_failure_rate=0.281 errors=0
+pick_two_obj_and_place: 0/17 success_rate=0.000 avg_env_steps=9.59 avg_agent_turns=19.47 invalid_action_rate=0.914 parse_failure_rate=0.366 errors=0
+
+Wrote results to /root/alfworld-agent/results/task4_prompt_ablation/runs/zero_shot/seed_2

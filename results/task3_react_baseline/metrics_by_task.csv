@@ -1,0 +1,8 @@
+task_type,episodes,successes,success_rate,avg_steps,avg_env_steps,avg_agent_turns,avg_action_steps,avg_thought_steps,invalid_actions,action_steps,invalid_action_rate,parse_failures,parse_failure_rate,errors
+overall,134,92,0.686567,17.015,17.015,25.030,17.015,6.701,734,2280,0.321930,176,0.052475,0
+pick_and_place_simple,24,23,0.958333,15.167,15.167,17.625,15.167,2.125,32,364,0.087912,8,0.018913,0
+pick_clean_then_place_in_recep,31,21,0.677419,19.774,19.774,23.968,19.774,3.161,309,613,0.504078,32,0.043069,0
+pick_heat_then_place_in_recep,23,20,0.869565,13.522,13.522,19.565,13.522,5.696,52,311,0.167203,8,0.017778,0
+pick_cool_then_place_in_recep,21,18,0.857143,16.333,16.333,19.667,16.333,3.333,165,343,0.481050,0,0.000000,0
+look_at_obj_in_light,18,2,0.111111,19.222,19.222,46.556,19.222,23.778,138,346,0.398844,64,0.076372,0
+pick_two_obj_and_place,17,8,0.470588,17.824,17.824,28.647,17.824,7.059,38,303,0.125413,64,0.131417,0

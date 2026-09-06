@@ -1,0 +1,24 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Python caches
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local editor/system files
+.DS_Store
+.vscode/
+.idea/
+
+# Local env files
+
+# Non-formal smoke/probe outputs
+results/task3_smoke/
+results/task4_smoke/
+results/task4_order_probe/
+results/task4_manual_run*/

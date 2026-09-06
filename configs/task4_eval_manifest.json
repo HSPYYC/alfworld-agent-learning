@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "split": "eval_out_of_distribution",
+  "source_trajectories": "../results/task3_react_baseline/trajectories.jsonl",
+  "expected_count": 134,
+  "gamefile_set_sha256": "9d7b36e410ca9fe4dc1fc5e20cb7750f823e271af775b4f650799e9da3740793"
+}

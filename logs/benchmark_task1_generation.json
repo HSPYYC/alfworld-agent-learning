@@ -1,0 +1,98 @@
+{
+  "base_url": "http://127.0.0.1:8000/v1",
+  "model": "qwen",
+  "num_requests": 16,
+  "max_tokens": 64,
+  "results": [
+    {
+      "concurrency": 1,
+      "num_requests": 16,
+      "wall_time_sec": 8.88974148221314,
+      "completion_tokens": 738,
+      "completion_tokens_per_sec": 83.01703727567471,
+      "latency_avg_sec": 0.5489213224500418,
+      "latency_p50_sec": 0.5272387750446796,
+      "latency_p95_sec": 0.6630916353315115,
+      "samples": [
+        {
+          "request_id": 0,
+          "latency_sec": 0.6630916353315115,
+          "completion_tokens": 44,
+          "text": "Action: go to fridge 1 pick up apple 1 bring apple 1 to microwave 1 heat apple 1 bring apple 1 to countertop 1 put apple 1 down on countertop 1"
+        },
+        {
+          "request_id": 1,
+          "latency_sec": 0.6751985549926758,
+          "completion_tokens": 58,
+          "text": "What is a valid text action to accomplish the task? To accomplish the task, a valid text action would be:\n\n\"Go to the fridge 1 and take an apple. Go to the microwave 1 and heat the apple. Place the heated apple on countertop 1.\""
+        },
+        {
+          "request_id": 2,
+          "latency_sec": 0.5250309053808451,
+          "completion_tokens": 45,
+          "text": "Action: go to fridge 1 pick up apple 1 bring apple 1 to microwave 1 heat apple 1 bring apple 1 to countertop 1 put apple 1 down on countertop 1 >"
+        }
+      ]
+    },
+    {
+      "concurrency": 8,
+      "num_requests": 16,
+      "wall_time_sec": 1.2587649002671242,
+      "completion_tokens": 710,
+      "completion_tokens_per_sec": 564.0449617314003,
+      "latency_avg_sec": 0.598145107505843,
+      "latency_p50_sec": 0.6042256522923708,
+      "latency_p95_sec": 0.6603182852268219,
+      "samples": [
+        {
+          "request_id": 3,
+          "latency_sec": 0.5932773817330599,
+          "completion_tokens": 44,
+          "text": "Action: go to fridge 1 pick up apple 1 bring apple 1 to microwave 1 heat apple 1 bring apple 1 to countertop 1 put apple 1 down on countertop 1"
+        },
+        {
+          "request_id": 1,
+          "latency_sec": 0.5951577350497246,
+          "completion_tokens": 44,
+          "text": "Action: go to fridge 1 pick up apple 1 bring apple 1 to microwave 1 heat apple 1 bring apple 1 to countertop 1 put apple 1 down on countertop 1"
+        },
+        {
+          "request_id": 0,
+          "latency_sec": 0.6044764276593924,
+          "completion_tokens": 45,
+          "text": "Action: go to fridge 1 To complete the task of heating some apple and putting it on countertop 1, I first need to obtain an apple from the fridge. Therefore, I will go to the fridge."
+        }
+      ]
+    },
+    {
+      "concurrency": 16,
+      "num_requests": 16,
+      "wall_time_sec": 0.833466250449419,
+      "completion_tokens": 747,
+      "completion_tokens_per_sec": 896.2570465177265,
+      "latency_avg_sec": 0.6920136437984183,
+      "latency_p50_sec": 0.691281633451581,
+      "latency_p95_sec": 0.7003573291003704,
+      "samples": [
+        {
+          "request_id": 0,
+          "latency_sec": 0.67698710039258,
+          "completion_tokens": 45,
+          "text": "Action: go to fridge 1 To complete the task of heating some apple and putting it on countertop 1, I first need to obtain an apple from the fridge. Therefore, I will go to the fridge."
+        },
+        {
+          "request_id": 2,
+          "latency_sec": 0.6765947602689266,
+          "completion_tokens": 45,
+          "text": "Action: go to fridge 1 pick up apple 1 bring apple 1 to microwave 1 heat apple 1 bring apple 1 to countertop 1 put apple 1 down on countertop 1 >"
+        },
+        {
+          "request_id": 15,
+          "latency_sec": 0.6659770142287016,
+          "completion_tokens": 45,
+          "text": "Action: go to fridge 1 pick up apple 1 bring apple 1 to microwave 1 heat apple 1 bring apple 1 to countertop 1 put apple 1 down on countertop 1 >"
+        }
+      ]
+    }
+  ]
+}

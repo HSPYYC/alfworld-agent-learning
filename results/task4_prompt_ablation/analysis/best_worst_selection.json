@@ -1,0 +1,24 @@
+{
+  "ranking": [
+    "success_rate_desc",
+    "invalid_action_rate_asc",
+    "parse_failure_rate_asc",
+    "avg_total_tokens_asc",
+    "config_name_asc"
+  ],
+  "ordered_best_to_worst": [
+    "summary_10",
+    "baseline",
+    "explicit_failure_feedback",
+    "recent_10",
+    "mixed_6shot",
+    "act_only",
+    "admissible_actions",
+    "cot_then_act",
+    "guided_json",
+    "random_nonmatching_2shot",
+    "zero_shot"
+  ],
+  "best": "summary_10",
+  "worst": "zero_shot"
+}

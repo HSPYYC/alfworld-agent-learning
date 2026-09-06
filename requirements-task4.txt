@@ -1,0 +1,2 @@
+-r requirements-task3.txt
+matplotlib==3.10.8

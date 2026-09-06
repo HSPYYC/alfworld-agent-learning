@@ -1,0 +1,132 @@
+version: 1
+
+defaults:
+  config: configs/base_config.yaml
+  prompt_file: prompts/alfworld_3prompts.json
+  gamefile_manifest: configs/task4_eval_manifest.json
+  split: eval_out_of_distribution
+  model: qwen
+  base_url: http://127.0.0.1:8000/v1
+  workers: 8
+  max_steps: 50
+  max_agent_turns: 150
+  max_tokens: 100
+  temperature: 0.0
+  max_context_chars: 24000
+  max_consecutive_parse_failures: 8
+  max_consecutive_thoughts: 24
+  examples_per_task: 2
+  agent_mode: react
+  fewshot_strategy: matched
+  prompt_seed: 42
+  include_admissible_actions: false
+  invalid_action_feedback: false
+  output_format: free
+  guided_decoding_backend: xgrammar
+  history_mode: full
+  history_k: 10
+  summary_max_tokens: 160
+
+primary_seed: 0
+replication_seeds: [1, 2]
+ranking:
+  - success_rate_desc
+  - invalid_action_rate_asc
+  - parse_failure_rate_asc
+  - avg_total_tokens_asc
+  - config_name_asc
+
+experiments:
+  baseline:
+    display_name_zh: "公共基线：ReAct + 任务匹配 2-shot"
+    direction_zh: "公共基线"
+    group: baseline
+    hypothesis: 任务类型匹配的 2-shot ReAct 配合完整历史，作为所有消融实验的公共对照。
+    overrides: {}
+
+  act_only:
+    display_name_zh: "方向1 推理策略：Act-only"
+    direction_zh: "方向1：推理策略"
+    group: reasoning
+    hypothesis: Act-only 会减少 token 消耗，但在需要多步规划的任务上成功率会下降。
+    overrides:
+      agent_mode: act
+
+  cot_then_act:
+    display_name_zh: "方向1 推理策略：CoT-then-Act"
+    direction_zh: "方向1：推理策略"
+    group: reasoning
+    hypothesis: 一次性初始规划会优于 Act-only，但仍弱于能根据反馈调整的 ReAct。
+    overrides:
+      agent_mode: cot_then_act
+
+  random_nonmatching_2shot:
+    display_name_zh: "方向2 Few-shot：随机非匹配 2-shot"
+    direction_zh: "方向2：Few-shot 数量与匹配"
+    group: fewshot
+    hypothesis: 随机选择的非匹配 2-shot 示例会弱于任务类型匹配的示例。
+    fixed_prompt_keys:
+      pick_and_place_simple: [react_examine_0, react_cool_1]
+      pick_clean_then_place_in_recep: [react_puttwo_2, react_put_1]
+      pick_heat_then_place_in_recep: [react_cool_0, react_puttwo_1]
+      pick_cool_then_place_in_recep: [react_clean_0, react_put_2]
+      look_at_obj_in_light: [react_puttwo_1, react_puttwo_0]
+      pick_two_obj_and_place: [react_clean_0, react_put_2]
+    overrides:
+      fewshot_strategy: random_nonmatching
+
+  mixed_6shot:
+    display_name_zh: "方向2 Few-shot：六类混合 6-shot"
+    direction_zh: "方向2：Few-shot 数量与匹配"
+    group: fewshot
+    hypothesis: 由于无关示例占用上下文，六类混合示例不会随数量增加而单调提升性能。
+    overrides:
+      fewshot_strategy: mixed6
+
+  zero_shot:
+    display_name_zh: "方向2 Few-shot：0-shot"
+    direction_zh: "方向2：Few-shot 数量与匹配"
+    group: fewshot
+    hypothesis: 移除示例会降低成功率，并增加任务协议与输出格式错误。
+    overrides:
+      fewshot_strategy: zero
+
+  admissible_actions:
+    display_name_zh: "方向3 动作空间：注入合法动作列表"
+    direction_zh: "方向3：Admissible actions"
+    group: action_space
+    hypothesis: 注入当前合法动作列表会以增加 prompt token 为代价，显著减少非法动作。
+    overrides:
+      include_admissible_actions: true
+
+  explicit_failure_feedback:
+    display_name_zh: "方向4 失败反馈：显式无效动作恢复提示"
+    direction_zh: "方向4：失败反馈"
+    group: failure_feedback
+    hypothesis: 显式失败反馈会减少重复非法动作和循环终止。
+    overrides:
+      invalid_action_feedback: true
+
+  guided_json:
+    display_name_zh: "方向5 输出结构：Guided JSON"
+    direction_zh: "方向5：输出结构"
+    group: output_structure
+    hypothesis: Guided JSON 会消除大部分语法错误，但未必减少语义上无效的动作。
+    overrides:
+      output_format: json
+
+  recent_10:
+    display_name_zh: "方向6 轨迹压缩：最近 10 turns"
+    direction_zh: "方向6：轨迹压缩"
+    group: history
+    hypothesis: 仅保留最近 10 个 turn 会降低上下文成本，但会损害长程搜索和物体状态跟踪。
+    overrides:
+      history_mode: recent
+
+  summary_10:
+    display_name_zh: "方向6 轨迹压缩：摘要 + 最近 10 turns"
+    direction_zh: "方向6：轨迹压缩"
+    group: history
+    hypothesis: 动态摘要会恢复部分窗口截断造成的损失，但会增加模型调用并带来记忆失真风险。
+    overrides:
+      history_mode: summary

@@ -1,0 +1,65 @@
+Python ALFWorld check
+- alfworld: 0.4.2
+- textworld: 1.7.0
+- ALFWORLD_DATA: /root/.cache/alfworld
+- config: configs/base_config.yaml
+
+Dataset summary:
+- train: 3553 playable solvable games
+  - look_at_obj_in_light: 308
+  - pick_and_place_simple: 790
+  - pick_clean_then_place_in_recep: 650
+  - pick_cool_then_place_in_recep: 533
+  - pick_heat_then_place_in_recep: 459
+  - pick_two_obj_and_place: 813
+  - skipped: missing_game=1086, movable_or_sliced=1735
+- eval_in_distribution: 140 playable solvable games
+  - look_at_obj_in_light: 13
+  - pick_and_place_simple: 35
+  - pick_clean_then_place_in_recep: 27
+  - pick_cool_then_place_in_recep: 25
+  - pick_heat_then_place_in_recep: 16
+  - pick_two_obj_and_place: 24
+  - skipped: missing_game=47, movable_or_sliced=64
+- eval_out_of_distribution: 134 playable solvable games
+  - look_at_obj_in_light: 18
+  - pick_and_place_simple: 24
+  - pick_clean_then_place_in_recep: 31
+  - pick_cool_then_place_in_recep: 21
+  - pick_heat_then_place_in_recep: 23
+  - pick_two_obj_and_place: 17
+  - skipped: missing_game=58, movable_or_sliced=63
+Initializing AlfredTWEnv...
+
+  0%|          | 0/341 [00:00<?, ?it/s]
+Overall we have 134 games in split=eval_out_of_distribution
+Evaluating with 134 games
+
+Environment reset:
+- split: eval_out_of_distribution
+- gamefile: /root/.cache/alfworld/json_2.1.1/valid_unseen/pick_and_place_simple-Mug-None-Desk-308/trial_T20190909_210238_431966/game.tw-pddl
+- observation:
+-= Welcome to TextWorld, ALFRED! =-
+
+You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.
+
+Your task is to: put a mug in desk.
+
+First 10 admissible commands:
+- go to bed 1
+- go to desk 1
+- go to desk 2
+- go to drawer 1
+- go to drawer 2
+- go to drawer 3
+- go to drawer 4
+- go to drawer 5
+- go to drawer 6
+- go to garbagecan 1
+
+One-step smoke test:
+- action: go to bed 1
+- reward: 0
+- done: False
+- next observation:
+You arrive at bed 1. On the bed 1, you see a book 2, a book 1, a cellphone 1, a laptop 1, and a pillow 1.

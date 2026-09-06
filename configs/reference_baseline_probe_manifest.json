@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "split": "eval_out_of_distribution",
+  "source_manifest": "configs/task4_eval_manifest.json",
+  "source_gamefile_set_sha256": "9d7b36e410ca9fe4dc1fc5e20cb7750f823e271af775b4f650799e9da3740793",
+  "selection": "first 5 lexicographically sorted gamefiles per task type",
+  "per_task": 5,
+  "expected_count": 30,
+  "gamefile_set_sha256": "4c7a1f891262be9b5e13de4abb18d0f8c56caf5f2fea8879885b09c4a48cb1f5"
+}

@@ -1,0 +1,84 @@
+Manual ALFWorld play transcript
+Terminal control sequences and shell-only noise were removed for readability.
+
+Command used:
+cd /root/alfworld-agent
+conda activate alfworld
+export ALFWORLD_DATA=~/.cache/alfworld
+alfworld-play-tw
+
+Selected problem:
+/root/.cache/alfworld/json_2.1.1/valid_train/look_at_obj_in_light-Pillow-None-DeskLamp-309/trial_T20190908_113756_084511
+
+Initial observation:
+-= Welcome to TextWorld, ALFRED! =-
+
+You are in the middle of a room. Looking quickly around you, you see a armchair 3, a armchair 2, a armchair 1, a bed 1, a cabinet 2, a cabinet 1, a desk 1, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, and a sidetable 1.
+
+Your task is to: examine the pillow with the desklamp.
+
+Interaction:
+> go to bed 1
+You arrive at bed 1. On the bed 1, you see a book 1, a laptop 2, a laptop 1, a pillow 4, a pillow 3, a pillow 2, and a pillow 1.
+
+> take pillow 1 from bed 1
+You pick up the pillow 1 from the bed 1.
+
+> go to desk 1
+You arrive at desk 1. On the desk 1, you see a alarmclock 2, a book 3, a houseplant 1, a pen 1, a pencil 1, and a remotecontrol 1.
+
+> go to sidetable 1
+You arrive at sidetable 1. On the sidetable 1, you see a alarmclock 1, a desklamp 1, and a mug 1.
+
+> toggle desklamp 1
+Nothing happens.
+
+> go to armchair 3
+You arrive at armchair 3. On the armchair 3, you see nothing.
+
+> go to armchair 1
+You arrive at armchair 1. On the armchair 1, you see nothing.
+
+> go to a cabinet 2
+Nothing happens.
+
+> go to a drawer 4
+Nothing happens.
+
+> go to a safe 1
+Nothing happens.
+
+> go to bed 1
+You arrive at bed 1. On the bed 1, you see a book 1, a laptop 2, a laptop 1, a pillow 4, a pillow 3, and a pillow 2.
+
+> take pillow from bed 1
+Nothing happens.
+
+> take pillow 2 from bed 1
+Nothing happens.
+
+> go to sidetable 1
+You arrive at sidetable 1. On the sidetable 1, you see a alarmclock 1, a desklamp 1, and a mug 1.
+
+> toggle desklamp 1
+Nothing happens.
+
+> go to drawer 1
+You arrive at drawer 1. The drawer 1 is closed.
+
+> open drawer 1
+You open the drawer 1. The drawer 1 is open. In it, you see a creditcard 1, and a keychain 3.
+
+> go to safe 1
+You arrive at safe 1. On the safe 1, you see a keychain 2, and a keychain 1.
+
+> go to armchair 2
+You arrive at armchair 2. On the armchair 2, you see nothing.
+
+> go to sidetable 1
+You arrive at sidetable 1. On the sidetable 1, you see a alarmclock 1, a desklamp 1, and a mug 1.
+
+> use desklamp 1
+You won!
+
+Result: success
