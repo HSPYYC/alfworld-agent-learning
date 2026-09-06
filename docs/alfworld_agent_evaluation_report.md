@@ -210,8 +210,6 @@ ALFWorld 提供结构化文本 observation 和离散动作，缺少像素定位�
 
 复现顺序：启动 vLLM，激活 `alfworld` 环境，运行 `python -m unittest tests.test_task4`，执行 `scripts/run_task4.py --stage dry-run`、`--stage smoke`、`--stage primary`，最后运行 `scripts/analyze_task4.py`。主结果使用固定 unseen manifest SHA-256：
 
-```text
-9d7b36e410ca9fe4dc1fc5e20cb7750f823e271af775b4f650799e9da3740793
-```
+
 
 
