@@ -214,4 +214,4 @@ ALFWorld 提供结构化文本 observation 和离散动作，缺少像素定位�
 9d7b36e410ca9fe4dc1fc5e20cb7750f823e271af775b4f650799e9da3740793
 ```
 
-本文主表只引用正式 Task 3/Task 4 结果；参考仓库风格的 chat 探针和未完成的顺序探针不计入正式结论。
+
