@@ -47,6 +47,9 @@ def make_args(**overrides) -> evaluator.EvalArgs:
         "summary_max_tokens": 160,
         "seed": 0,
         "gamefile_manifest": None,
+        "task_type_filter": None,
+        "lookat_lamp_action_repair": False,
+        "lookat_lamp_grammar_hint": False,
     }
     values.update(overrides)
     return evaluator.EvalArgs(**values)
@@ -209,6 +212,97 @@ class LLMRequestTests(unittest.TestCase):
         )
         self.assertEqual(client.completions.create.call_args.kwargs["stop"], ["\n"])
         self.assertIsNone(client.completions.create.call_args.kwargs["extra_body"])
+
+
+class TaskFilterAndRepairTests(unittest.TestCase):
+    def test_task_type_filter_keeps_only_look_at_tasks(self) -> None:
+        args = make_args(
+            gamefile_manifest="configs/task4_eval_manifest.json",
+            task_type_filter="look_at_obj_in_light",
+        )
+        gamefiles = evaluator.collect_game_files({}, args)
+        self.assertEqual(len(gamefiles), 18)
+        self.assertTrue(
+            all(
+                evaluator.get_task_type_from_gamefile(gamefile) == "look_at_obj_in_light"
+                for gamefile in gamefiles
+            )
+        )
+
+    def test_lookat_lamp_repair_disabled_does_not_rewrite(self) -> None:
+        repaired, applied, repair_type = evaluator.repair_action(
+            "examine alarmclock 1 with desklamp 1",
+            "look_at_obj_in_light",
+            False,
+            {"alarmclock 1"},
+        )
+        self.assertEqual(repaired, "examine alarmclock 1 with desklamp 1")
+        self.assertFalse(applied)
+        self.assertIsNone(repair_type)
+
+    def test_lookat_lamp_repair_rewrites_when_target_is_held(self) -> None:
+        repaired, applied, repair_type = evaluator.repair_action(
+            "examine alarmclock 1 with desklamp 1",
+            "look_at_obj_in_light",
+            True,
+            {"alarmclock 1"},
+        )
+        self.assertEqual(repaired, "use desklamp 1")
+        self.assertTrue(applied)
+        self.assertEqual(repair_type, evaluator.LOOKAT_LAMP_REPAIR_TYPE)
+
+        repaired, applied, repair_type = evaluator.repair_action(
+            "look at alarmclock 1 with desklamp 1",
+            "look_at_obj_in_light",
+            True,
+            {"alarmclock 1"},
+        )
+        self.assertEqual(repaired, "use desklamp 1")
+        self.assertTrue(applied)
+        self.assertEqual(repair_type, evaluator.LOOKAT_LAMP_REPAIR_TYPE)
+
+    def test_lookat_lamp_repair_requires_desklamp(self) -> None:
+        repaired, applied, repair_type = evaluator.repair_action(
+            "examine alarmclock 1 with floorlamp 1",
+            "look_at_obj_in_light",
+            True,
+            {"alarmclock 1"},
+        )
+        self.assertEqual(repaired, "examine alarmclock 1 with floorlamp 1")
+        self.assertFalse(applied)
+        self.assertIsNone(repair_type)
+
+    def test_lookat_lamp_repair_requires_held_target(self) -> None:
+        repaired, applied, repair_type = evaluator.repair_action(
+            "examine alarmclock 1 with desklamp 1",
+            "look_at_obj_in_light",
+            True,
+            set(),
+        )
+        self.assertEqual(repaired, "examine alarmclock 1 with desklamp 1")
+        self.assertFalse(applied)
+        self.assertIsNone(repair_type)
+
+    def test_lookat_lamp_repair_is_look_task_only(self) -> None:
+        repaired, applied, repair_type = evaluator.repair_action(
+            "examine alarmclock 1 with desklamp 1",
+            "pick_and_place_simple",
+            True,
+            {"alarmclock 1"},
+        )
+        self.assertEqual(repaired, "examine alarmclock 1 with desklamp 1")
+        self.assertFalse(applied)
+        self.assertIsNone(repair_type)
+
+    def test_put_in_on_adapter_still_normalizes_to_move(self) -> None:
+        self.assertEqual(
+            evaluator.parse_model_output("put apple 1 in/on table 1", "free"),
+            ("move apple 1 to table 1", "action", None),
+        )
+        self.assertEqual(
+            evaluator.parse_model_output("place apple 1 on table 1", "free"),
+            ("move apple 1 to table 1", "action", None),
+        )
 
 
 class ContextAndManifestTests(unittest.TestCase):

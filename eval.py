@@ -160,6 +160,9 @@ class EvalArgs:
     summary_max_tokens: int
     seed: int
     gamefile_manifest: str | None
+    task_type_filter: str | None
+    lookat_lamp_action_repair: bool
+    lookat_lamp_grammar_hint: bool
 
 
 def parse_args() -> argparse.Namespace:
@@ -247,6 +250,25 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="JSON manifest that fixes the evaluated gamefile set and verifies its SHA-256.",
     )
+    parser.add_argument(
+        "--task-type-filter",
+        choices=TASK_ORDER,
+        default=None,
+        help="Only evaluate gamefiles whose inferred task type matches this value.",
+    )
+    parser.add_argument(
+        "--lookat-lamp-action-repair",
+        action="store_true",
+        help=(
+            "For look_at_obj_in_light only, rewrite supported examine/look-at-with-lamp "
+            "actions to use DESKLAMP after the target object has been successfully taken."
+        ),
+    )
+    parser.add_argument(
+        "--lookat-lamp-grammar-hint",
+        action="store_true",
+        help="Add a look_at_obj_in_light prompt hint about taking the target before using the lamp.",
+    )
     return parser.parse_args()
 
 
@@ -292,6 +314,9 @@ def to_eval_args(args: argparse.Namespace) -> EvalArgs:
         summary_max_tokens=args.summary_max_tokens,
         seed=args.seed,
         gamefile_manifest=args.gamefile_manifest,
+        task_type_filter=args.task_type_filter,
+        lookat_lamp_action_repair=args.lookat_lamp_action_repair,
+        lookat_lamp_grammar_hint=args.lookat_lamp_grammar_hint,
     )
 
 
@@ -630,6 +655,7 @@ def build_prompt(
     initial_obs: str,
     args: EvalArgs,
     initial_plan: str | None = None,
+    task_type: str | None = None,
 ) -> str:
     count = len(bundle.keys)
     if count == 2:
@@ -646,6 +672,11 @@ def build_prompt(
         instructions.append(
             'Output one JSON object per turn with exactly the keys "thought" and "action". '
             "Exactly one value must be non-empty."
+        )
+    if args.lookat_lamp_grammar_hint and task_type == "look_at_obj_in_light":
+        instructions.append(
+            'For look_at_obj_in_light tasks, do not output "examine X with desklamp". '
+            "First take X, then use desklamp N while holding X."
         )
 
     sections = [intro]
@@ -852,6 +883,49 @@ def current_commands(info: dict[str, Any]) -> list[str]:
     return list(commands) if isinstance(commands, (list, tuple)) else []
 
 
+LOOKAT_LAMP_REPAIR_TYPE = "lookat_lamp_examine_to_use"
+LOOKAT_LAMP_REPAIR_RE = re.compile(
+    r"^(?:examine|look at) (?P<target>[a-z]+ \d+) with (?P<lamp>desklamp \d+)$"
+)
+TAKE_FROM_RE = re.compile(r"^take (?P<object>[a-z]+ \d+) from [a-z]+ \d+$")
+MOVE_TO_RE = re.compile(r"^move (?P<object>[a-z]+ \d+) to [a-z]+ \d+$")
+
+
+def repair_action(
+    normalized_action: str,
+    task_type: str,
+    lookat_lamp_action_repair: bool,
+    held_objects: set[str],
+) -> tuple[str, bool, str | None]:
+    if not lookat_lamp_action_repair:
+        return normalized_action, False, None
+    if task_type != "look_at_obj_in_light":
+        return normalized_action, False, None
+    match = LOOKAT_LAMP_REPAIR_RE.fullmatch(normalized_action)
+    if not match:
+        return normalized_action, False, None
+    target = match.group("target")
+    if target not in held_objects:
+        return normalized_action, False, None
+    return f"use {match.group('lamp')}", True, LOOKAT_LAMP_REPAIR_TYPE
+
+
+def update_held_objects_after_action(
+    action: str,
+    invalid_observation: bool,
+    held_objects: set[str],
+) -> None:
+    if invalid_observation:
+        return
+    take_match = TAKE_FROM_RE.fullmatch(action)
+    if take_match:
+        held_objects.add(take_match.group("object"))
+        return
+    move_match = MOVE_TO_RE.fullmatch(action)
+    if move_match:
+        held_objects.discard(move_match.group("object"))
+
+
 def empty_episode(
     index: int,
     gamefile: str,
@@ -884,6 +958,9 @@ def empty_episode(
         "invalid_actions": 0,
         "nothing_happens": 0,
         "repeated_actions": 0,
+        "action_repairs": 0,
+        "lookat_lamp_repairs": 0,
+        "repair_rate": 0.0,
         "invalid_action_rate": 0.0,
         "parse_failure_rate": 0.0,
         "repeated_action_rate": 0.0,
@@ -965,7 +1042,7 @@ def run_episode(
             row["selected_prompt_keys"] = list(bundle.keys)
             return row
 
-    base_prompt = build_prompt(bundle, initial_obs, args, initial_plan)
+    base_prompt = build_prompt(bundle, initial_obs, args, initial_plan, task_type=task_type)
     trajectory_text: list[str] = []
     trajectory: list[dict[str, Any]] = []
     memory_summary = ""
@@ -984,6 +1061,9 @@ def run_episode(
     invalid_actions = 0
     nothing_happens = 0
     repeated_actions = 0
+    action_repairs = 0
+    lookat_lamp_repairs = 0
+    held_objects: set[str] = set()
     decision_prompt_tokens = 0
     decision_completion_tokens = 0
     decision_total_tokens = 0
@@ -1046,6 +1126,11 @@ def run_episode(
         agent_turns += 1
         raw_output = ""
         normalized = ""
+        raw_intended_action = ""
+        normalized_before_repair = ""
+        normalized_after_repair = ""
+        repair_applied = False
+        repair_type = None
         kind = "error"
         observation = ""
         model_feedback = ""
@@ -1076,6 +1161,9 @@ def run_episode(
             normalized, kind, parse_failure_reason = parse_model_output(
                 raw_output, args.output_format
             )
+            raw_intended_action = raw_output
+            normalized_before_repair = normalized
+            normalized_after_repair = normalized
 
             if kind == "thought" and args.agent_mode != "react":
                 kind = "parse_failure"
@@ -1099,6 +1187,18 @@ def run_episode(
                 model_feedback = observation
 
             elif kind == "action":
+                normalized, repair_applied, repair_type = repair_action(
+                    normalized,
+                    task_type,
+                    args.lookat_lamp_action_repair,
+                    held_objects,
+                )
+                normalized_after_repair = normalized
+                if repair_applied:
+                    action_repairs += 1
+                    if repair_type == LOOKAT_LAMP_REPAIR_TYPE:
+                        lookat_lamp_repairs += 1
+
                 action_steps += 1
                 consecutive_parse_failures = 0
                 consecutive_thoughts = 0
@@ -1113,6 +1213,7 @@ def run_episode(
                 invalid_observation = is_invalid_observation(observation)
                 if invalid_observation:
                     nothing_happens += 1
+                update_held_objects_after_action(normalized, invalid_observation, held_objects)
                 model_feedback = (
                     INVALID_ACTION_FEEDBACK
                     if args.invalid_action_feedback and invalid_observation
@@ -1158,6 +1259,11 @@ def run_episode(
                     "env_step": env_steps,
                     "raw_output": raw_output,
                     "normalized": normalized,
+                    "raw_intended_action": raw_intended_action,
+                    "normalized_before_repair": normalized_before_repair,
+                    "normalized_after_repair": normalized_after_repair,
+                    "repair_applied": repair_applied,
+                    "repair_type": repair_type,
                     "kind": kind,
                     "observation": observation,
                     "model_feedback": model_feedback,
@@ -1177,6 +1283,11 @@ def run_episode(
                 "env_step": env_steps,
                 "raw_output": raw_output,
                 "normalized": normalized,
+                "raw_intended_action": raw_intended_action,
+                "normalized_before_repair": normalized_before_repair,
+                "normalized_after_repair": normalized_after_repair,
+                "repair_applied": repair_applied,
+                "repair_type": repair_type,
                 "kind": kind,
                 "observation": observation,
                 "model_feedback": model_feedback,
@@ -1251,6 +1362,9 @@ def run_episode(
         "invalid_actions": invalid_actions,
         "nothing_happens": nothing_happens,
         "repeated_actions": repeated_actions,
+        "action_repairs": action_repairs,
+        "lookat_lamp_repairs": lookat_lamp_repairs,
+        "repair_rate": action_repairs / action_steps if action_steps else 0.0,
         "invalid_action_rate": invalid_actions / action_steps if action_steps else 0.0,
         "parse_failure_rate": parse_failures / agent_turns if agent_turns else 0.0,
         "repeated_action_rate": repeated_actions / action_steps if action_steps else 0.0,
@@ -1373,6 +1487,12 @@ def collect_game_files(config: dict[str, Any], args: EvalArgs) -> list[str]:
     else:
         collector = make_collector(config, args.split)
         game_files = list(collector.game_files)
+    if args.task_type_filter:
+        game_files = [
+            gamefile
+            for gamefile in game_files
+            if get_task_type_from_gamefile(gamefile) == args.task_type_filter
+        ]
     if args.limit is not None:
         game_files = game_files[: args.limit]
     return game_files
@@ -1415,6 +1535,8 @@ def summarize(rows: list[dict[str, Any]], args: EvalArgs) -> dict[str, Any]:
         invalid_actions = total(subset, "invalid_actions")
         nothing_happens = total(subset, "nothing_happens")
         repeated_actions = total(subset, "repeated_actions")
+        action_repairs = total(subset, "action_repairs")
+        lookat_lamp_repairs = total(subset, "lookat_lamp_repairs")
         prompt_tokens = total(subset, "prompt_tokens")
         completion_tokens = total(subset, "completion_tokens")
         total_tokens = total(subset, "total_tokens")
@@ -1455,6 +1577,9 @@ def summarize(rows: list[dict[str, Any]], args: EvalArgs) -> dict[str, Any]:
             "invalid_actions": invalid_actions,
             "nothing_happens": nothing_happens,
             "repeated_actions": repeated_actions,
+            "action_repairs": action_repairs,
+            "lookat_lamp_repairs": lookat_lamp_repairs,
+            "repair_rate": action_repairs / action_steps if action_steps else 0.0,
             "prompt_tokens": prompt_tokens,
             "completion_tokens": completion_tokens,
             "total_tokens": total_tokens,
@@ -1467,6 +1592,7 @@ def summarize(rows: list[dict[str, Any]], args: EvalArgs) -> dict[str, Any]:
         }
 
     by_task = {task: metric(groups.get(task, [])) for task in TASK_ORDER}
+    overall = metric(rows)
     termination_counts = Counter(row.get("termination_reason", "unknown") for row in rows)
     prompt_bundles = load_prompts(args.prompt_file, args)
     payload = {
@@ -1493,6 +1619,9 @@ def summarize(rows: list[dict[str, Any]], args: EvalArgs) -> dict[str, Any]:
             "summary_max_tokens": args.summary_max_tokens,
             "seed": args.seed,
             "gamefile_manifest": args.gamefile_manifest,
+            "task_type_filter": args.task_type_filter,
+            "lookat_lamp_action_repair": args.lookat_lamp_action_repair,
+            "lookat_lamp_grammar_hint": args.lookat_lamp_grammar_hint,
             "gamefile_set_sha256": gamefile_set_sha256(
                 [row["gamefile"] for row in rows]
             ),
@@ -1510,6 +1639,7 @@ def summarize(rows: list[dict[str, Any]], args: EvalArgs) -> dict[str, Any]:
             "workers": args.workers,
             "limit": args.limit,
             "placement_command_adapter": "normalize ReAct-style put OBJECT in/on RECEPTACLE to local ALFWorld move OBJECT to RECEPTACLE",
+            "lookat_lamp_action_repair_definition": "optionally rewrite examine/look at TARGET with desklamp N to use desklamp N only after TARGET is held in look_at_obj_in_light tasks",
             "admissible_commands_in_prompt": args.include_admissible_actions,
         },
         "metric_definitions": {
@@ -1523,11 +1653,16 @@ def summarize(rows: list[dict[str, Any]], args: EvalArgs) -> dict[str, Any]:
             "invalid_action_rate": "invalid_actions / action_steps",
             "parse_failure_rate": "parse_failures / agent_turns",
             "repeated_action_rate": "consecutive repeated actions / action_steps",
+            "repair_rate": "action_repairs / action_steps",
             "avg_steps": "average env_steps",
             "token_metrics": "OpenAI-compatible API usage fields, including planner and summarizer calls",
         },
-        "overall": metric(rows),
+        "overall": overall,
         "by_task": by_task,
+        "task_type_filter": args.task_type_filter,
+        "action_repairs": overall["action_repairs"],
+        "lookat_lamp_repairs": overall["lookat_lamp_repairs"],
+        "repair_rate": overall["repair_rate"],
         "failure_count": sum(1 for row in rows if not row["success"]),
         "task_counts": dict(Counter(row["task_type"] for row in rows)),
         "termination_counts": dict(termination_counts),
@@ -1548,6 +1683,7 @@ METRICS_CSV_COLUMNS = [
     "invalid_action_rate",
     "parse_failure_rate",
     "repeated_action_rate",
+    "repair_rate",
     "avg_prompt_tokens",
     "avg_completion_tokens",
     "avg_total_tokens",
@@ -1556,6 +1692,8 @@ METRICS_CSV_COLUMNS = [
     "json_parse_failures",
     "mode_violations",
     "nothing_happens",
+    "action_repairs",
+    "lookat_lamp_repairs",
     "summary_calls",
     "context_truncated_episodes",
     "context_budget_truncated_episodes",
@@ -1601,6 +1739,7 @@ def print_summary(summary: dict[str, Any]) -> None:
         f"avg_agent_turns={overall['avg_agent_turns']:.2f} "
         f"invalid_action_rate={overall['invalid_action_rate']:.3f} "
         f"parse_failure_rate={overall['parse_failure_rate']:.3f} "
+        f"repairs={overall['action_repairs']} "
         f"errors={overall['errors']}"
     )
     for task in TASK_ORDER:
@@ -1612,6 +1751,7 @@ def print_summary(summary: dict[str, Any]) -> None:
             f"avg_agent_turns={item['avg_agent_turns']:.2f} "
             f"invalid_action_rate={item['invalid_action_rate']:.3f} "
             f"parse_failure_rate={item['parse_failure_rate']:.3f} "
+            f"repairs={item['action_repairs']} "
             f"errors={item['errors']}"
         )
 

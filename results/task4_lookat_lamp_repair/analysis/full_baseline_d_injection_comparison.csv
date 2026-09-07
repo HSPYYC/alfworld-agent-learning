@@ -1,0 +1,8 @@
+task_type,baseline_successes,injected_successes,episodes,baseline_success_rate,injected_success_rate,delta_successes,delta_success_rate_pp,baseline_invalid_action_rate,injected_invalid_action_rate,delta_invalid_rate_pp,baseline_parse_failure_rate,injected_parse_failure_rate,delta_parse_rate_pp,lookat_lamp_repairs,fail_to_success,success_to_fail
+overall,91,103,134,0.679104,0.768657,12,8.955,0.304770,0.284511,-2.026,0.066948,0.044787,-2.216,2,13,1
+pick_and_place_simple,22,22,24,0.916667,0.916667,0,0.000,0.103261,0.103261,0.000,0.036364,0.017699,-1.866,0,0,0
+pick_clean_then_place_in_recep,21,20,31,0.677419,0.645161,-1,-3.226,0.428325,0.444062,1.574,0.053908,0.041775,-1.213,0,0,1
+pick_heat_then_place_in_recep,20,20,23,0.869565,0.869565,0,0.000,0.184466,0.184818,0.035,0.040268,0.019277,-2.099,0,0,0
+pick_cool_then_place_in_recep,18,18,21,0.857143,0.857143,0,0.000,0.497462,0.478261,-1.920,0.000000,0.000000,0.000,0,0,0
+look_at_obj_in_light,2,14,18,0.111111,0.777778,12,66.667,0.366071,0.238636,-12.744,0.110667,0.042553,-6.811,2,12,0
+pick_two_obj_and_place,8,9,17,0.470588,0.529412,1,5.882,0.100719,0.101449,0.073,0.140086,0.149184,0.910,0,1,0

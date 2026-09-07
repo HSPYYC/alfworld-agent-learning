@@ -154,6 +154,94 @@ parse rate 从 6.7% 降至 0.8%，非法动作率降至 9.0%，但成功率只�
 
 Prompt 较擅长解决输出外壳、示例协议、局部恢复措辞和短期记忆长度；它很难稳定补上未学会的状态机、跨长轨迹对象绑定、失败后的策略切换与基于环境成功信号的校验。某个提示若只把错误从 parse loop 移到 50 步耗尽，不能算能力提升。当多个单变量 prompt 在同一 episode 上持续失败，且错误涉及同一种可执行协议或状态转移时，应停止继续堆提示，转向用成功轨迹和纠错轨迹做 SFT，再用环境奖励或偏好优化训练恢复策略。
 
+## look_at_obj_in_light 专项补跑
+
+本节是针对 `eval_out_of_distribution` 中 18 个 unseen `look_at_obj_in_light` 任务的专项诊断，不替代任务三/任务四 134 局主结果。实验继续使用同一 Qwen completion 服务、同一 manifest、`temperature=0`、`max_steps=50`、8 workers，且不使用 `info["admissible_commands"]` 替模型选择动作；该字段只用于统计非法动作。
+
+ALFWorld 0.4.2 的灯检任务完成协议不是 `examine X with desklamp Y`。更可靠的流程是先找到并 `take X from receptacle`，再在持有 X 的状态下到灯处执行 `use desklamp Y`。本次新增两个互相独立的开关：`--task-type-filter look_at_obj_in_light` 只运行该任务类型；`--lookat-lamp-action-repair` 默认为 false，仅在 look-at 任务、模型动作匹配 `examine/look at TARGET with desklamp N`、灯对象是 desklamp、且轨迹中已成功执行过 `take TARGET from ...` 时，将动作改写为 `use desklamp N`。每步 trajectory 记录 `repair_applied`、`repair_type`、`raw_intended_action`、`normalized_before_repair`、`normalized_after_repair`；summary 记录 `task_type_filter`、`action_repairs`、`lookat_lamp_repairs`、`repair_rate`。
+
+需要区分两类修正：`put OBJECT in/on RECEPTACLE -> move OBJECT to RECEPTACLE` 是所有实验共享的本地 grammar compatibility fix；`examine X with desklamp -> use desklamp` 是额外 action repair，必须单独报告。`baseline-look-only vs repair-look-only` 属于 parser/action-repair ablation，不是纯 prompt ablation；`baseline-look-only vs grammar-hint-look-only` 才是 prompt-only ablation；`grammar_hint_plus_repair` 是组合上限，不用于单变量归因。
+
+| experiment | successes | episodes | success_rate | avg_env_steps | invalid_action_rate | parse_failure_rate | lookat_lamp_repairs | avg_total_tokens | wall_time_sec |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline_look_only | 1 | 18 | 0.055556 | 21.277778 | 0.409922 | 0.089385 | 0 | 115458.166667 | 212.694879 |
+| repair_look_only | 2 | 18 | 0.111111 | 18.277778 | 0.404255 | 0.089286 | 0 | 100313.277778 | 178.903680 |
+| grammar_hint_look_only | 12 | 18 | 0.666667 | 14.222222 | 0.203125 | 0.040380 | 0 | 49754.611111 | 94.410068 |
+| grammar_hint_plus_repair_look_only | 14 | 18 | 0.777778 | 14.611111 | 0.258555 | 0.066327 | 2 | 44712.500000 | 92.058259 |
+
+| 对比 | Before | After | Δ Success Rate | Δ Invalid Rate | 结论 |
+| --- | ---: | ---: | ---: | ---: | --- |
+| baseline-look-only vs repair-look-only | 1/18 (5.6%) | 2/18 (11.1%) | +5.6 pp | -0.6 pp | parser/action-repair 是否有效 |
+| baseline-look-only vs grammar-hint-look-only | 1/18 (5.6%) | 12/18 (66.7%) | +61.1 pp | -20.7 pp | prompt-only 是否有效 |
+| grammar-hint-look-only vs grammar-hint+repair | 12/18 (66.7%) | 14/18 (77.8%) | +11.1 pp | +5.5 pp | 组合上限，不做单变量归因 |
+
+四组实验的解释是：`baseline_look_only` 只过滤出 18 个灯检任务，不改变 baseline；`repair_look_only` 只开启动作层 repair，不改 prompt；`grammar_hint_look_only` 只改 prompt，是干净的 prompt-only 对照；`grammar_hint_plus_repair_look_only` 同时改 prompt 和 action repair，是组合上限。D 组最高不等于“parser 是主因”，因为 D 同时包含了 prompt hint 和 repair，而且 C 组只改 prompt 就从 1/18 到 12/18。相反，repair-only 虽到 2/18，但 `lookat_lamp_repairs=0`，没有直接证据表明 action repair 本身造成提升。
+
+因此，灯检任务差不能简单归因成“baseline parser 写错”。baseline parser 是把模型输出的 `examine OBJECT with desklamp` 照实交给环境；问题在于 ALFWorld 0.4.2 的可完成协议要求先拿目标物体，再在持有目标时 `use desklamp`。如果评测器把 `examine ... with desklamp` 改成 `use desklamp`，这属于替模型修动作的能力注入，不是普通语法解析。官方 ReAct prompt 也不是完全错误；它的示例通常包含先拿物体再用灯，但提示不够显式，当前 7B 模型容易被任务文字“examine ... with the desklamp”诱导出错误动作。更严谨的结论是：官方 prompt 对 look-at 动作协议强调不足，显式 grammar hint 能显著缓解。
+
+结果文件位于 `results/task4_lookat_lamp_repair/`，每个实验目录包含 `summary.json`、`trajectories.jsonl` 和 `metrics_by_task.csv`；聚合表为 `results/task4_lookat_lamp_repair/analysis/lookat_before_after.csv` 与 `.md`。运行命令如下：
+
+```bash
+# A. baseline_look_only
+ALFWORLD_DATA=/root/.cache/alfworld python eval.py \
+  --gamefile-manifest configs/task4_eval_manifest.json \
+  --split eval_out_of_distribution \
+  --workers 8 --seed 0 \
+  --task-type-filter look_at_obj_in_light \
+  --output-dir results/task4_lookat_lamp_repair/baseline_look_only
+
+# B. repair_look_only
+ALFWORLD_DATA=/root/.cache/alfworld python eval.py \
+  --gamefile-manifest configs/task4_eval_manifest.json \
+  --split eval_out_of_distribution \
+  --workers 8 --seed 0 \
+  --task-type-filter look_at_obj_in_light \
+  --lookat-lamp-action-repair \
+  --output-dir results/task4_lookat_lamp_repair/repair_look_only
+
+# C. grammar_hint_look_only
+ALFWORLD_DATA=/root/.cache/alfworld python eval.py \
+  --gamefile-manifest configs/task4_eval_manifest.json \
+  --split eval_out_of_distribution \
+  --workers 8 --seed 0 \
+  --task-type-filter look_at_obj_in_light \
+  --lookat-lamp-grammar-hint \
+  --output-dir results/task4_lookat_lamp_repair/grammar_hint_look_only
+
+# D. grammar_hint_plus_repair_look_only
+ALFWORLD_DATA=/root/.cache/alfworld python eval.py \
+  --gamefile-manifest configs/task4_eval_manifest.json \
+  --split eval_out_of_distribution \
+  --workers 8 --seed 0 \
+  --task-type-filter look_at_obj_in_light \
+  --lookat-lamp-grammar-hint \
+  --lookat-lamp-action-repair \
+  --output-dir results/task4_lookat_lamp_repair/grammar_hint_plus_repair_look_only
+
+python scripts/analyze_lookat_lamp_repair.py \
+  --results-root results/task4_lookat_lamp_repair
+```
+
+轨迹统计显示，baseline look-only 中 `examine/look at ... with desklamp` 出现 36 次；repair-only 中出现 37 次，但因为没有满足“已成功拿着同一目标物体”的触发状态，`lookat_lamp_repairs=0`。因此 repair-only 从 1/18 到 2/18 的差异不能归因为实际 repair 触发，应视为并发推理/轨迹波动下的弱信号。grammar hint 将成功率提升到 12/18，说明主要收益来自 prompt 明确任务协议。组合臂达到 14/18，并触发 2 次 repair，但这两次 `use desklamp` 当步都返回 `Nothing happens`，组合增益不能解释成单独 action repair 的干净效果。
+
+如果 repair 在独立、成对、可复现实验中稳定提升成功率，说明部分失败来自可修复的动作协议；本次结果更接近“提升有限且触发稀疏”，说明瓶颈还包括没有先拿目标物体、找灯失败、对象记忆错误或长程恢复失败。当前建议是保留 `--lookat-lamp-action-repair` 作为单独 ablation/诊断开关，不并入 baseline 默认行为；更值得优先并入的是可解释、prompt-only 的 look-at grammar hint，但它也应作为新 prompt 配置报告，而不是悄悄改写 baseline。
+
+### 全量 134 局 D 式能力注入复跑
+
+随后将 D 的设置用于全量 unseen 134 局：保留原 baseline 其他设置，同时开启 `--lookat-lamp-grammar-hint` 和 `--lookat-lamp-action-repair`，不使用 `--task-type-filter`。该运行不是原始 baseline，而是“baseline + 任务特定协议提示 + 很窄 action repair”的增强版。
+
+| 指标 | 原任务四 seed0 baseline | baseline + D 式注入 | 变化 |
+| --- | ---: | ---: | ---: |
+| overall 成功数 | 91/134 | 103/134 | +12 |
+| overall 成功率 | 67.9% | 76.9% | +9.0 pp |
+| overall invalid action rate | 30.5% | 28.5% | -2.0 pp |
+| overall parse failure rate | 6.7% | 4.5% | -2.2 pp |
+| look-at 成功数 | 2/18 | 14/18 | +12 |
+| look-at 成功率 | 11.1% | 77.8% | +66.7 pp |
+| look-at repairs | 0 | 2 | +2 |
+
+配对到同一批 game 后，整体为 13 局失败变成功、1 局成功变失败，净 +12；`look_at_obj_in_light` 本身是 12 局失败变成功、0 局退化。非 look-at 五类合计仍为 89/116，因此全量提升基本来自灯检任务。这说明“按 D 式能力注入重跑 baseline，成功率会上升”在本次 seed0 中成立；但归因仍应写成“任务特定协议提示修复了 look-at 行为”，不能写成“parser-only 修复了 baseline”。
+
 ## 8. Completion 与 chat 的控制
 
 官方 ReAct prompt 是一个连续 completion 文本，末尾以 `> `等待下一行：
